@@ -1,5 +1,7 @@
 // Web uygulaması için bir yapılandırıcı (builder) oluşturur
 using api.Data;
+using api.Interfaces;
+using api.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDBContex>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+//Bu kod, Dependency Injection (DI) mekanizmasında IStockRepository arayüzünü, StockRepository sınıfı ile eşleştirerek bağımlılık yönetimini sağlar.
+//ASP.NET Core'da bağımlılıkları kaydetmek için 3 farklı yöntem vardır:
+//1️⃣ AddScoped<> → Her HTTP isteği için tek bir nesne oluşturur.
+//2️⃣ AddTransient<> → Her kullanımda yeni bir nesne oluşturur.
+//3️⃣ AddSingleton<> → Uygulama süresince tek bir nesne oluşturur.
+builder.Services.AddScoped<IStockRepository , StockRepository>();
 
 // Uygulama nesnesini oluşturur (Dependency Injection, Middleware'ler ve diğer yapılandırmaları hazır hale getirir).
 var app = builder.Build();
