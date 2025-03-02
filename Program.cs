@@ -38,6 +38,8 @@ builder.Services.AddDbContext<ApplicationDBContex>(options => {
 //2️⃣ AddTransient<> → Her kullanımda yeni bir nesne oluşturur.
 //3️⃣ AddSingleton<> → Uygulama süresince tek bir nesne oluşturur.
 builder.Services.AddScoped<IStockRepository , StockRepository>();
+builder.Services.AddScoped<ICommentRepository , CommentRepository>();
+
 
 // Uygulama nesnesini oluşturur (Dependency Injection, Middleware'ler ve diğer yapılandırmaları hazır hale getirir).
 var app = builder.Build();
