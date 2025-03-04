@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Stocks;
@@ -19,7 +20,8 @@ namespace api.Mappers
                 Purchase = stockModel.Purchase,
                 LastDiv = stockModel.LastDiv,
                 Industry = stockModel.Industry,
-                MarketCap = stockModel.MarketCap
+                MarketCap = stockModel.MarketCap,
+                Comments = stockModel.Comments.Select(x => x.ToCommentDto()).ToList()
 
             };
         }

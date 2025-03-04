@@ -14,10 +14,13 @@ namespace api.Controllers
     {
         
         private readonly ICommentRepository _commentRepo;
+        // stock repo uretmemeizin sebebi stock reponun  stockidsine ulasmamiz lazim 
+        private readonly IStockRepository _stockRepo;
 
-        public CommentController( ICommentRepository commentRepo)
+        public CommentController( ICommentRepository commentRepo , IStockRepository  stockRepo)
         {
             _commentRepo=commentRepo;
+            _stockRepo=stockRepo;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll(){
@@ -34,13 +37,41 @@ namespace api.Controllers
             }
             return Ok(comment.ToCommentDto());
         }
-        [HttpPost]
-        public async  Task<IActionResult> Create ([FromBody] CreateCommentRequestDto createCommentReq)
+        /// CREATEED METOT
+        [HttpPost("{stockId}")]
+        public async  Task<IActionResult> Create ([FromRoute] int stockId,[FromBody] CreateCommentRequestDto createCommentReq)
         {
-            var commentModel = createCommentReq.toCommentFromCreateDto();
-            await _commentRepo.CreateAsync(commentModel);
-            return CreatedAtAction(nameof(GetById), new {id = commentModel.ToCommentDto()});
+            // iste stock id Kontrol ediyoruz boyle bir stock var mi dye bakiyoruz yoksa hata veriyoruz
+
+            if (!await _stockRepo.StockExists(stockId))
+            {
+                return BadRequest("Stock is not exist!!!");
+            }
+             var commentModel = createCommentReq.ToCommentFromCreate(stockId);
+             await _commentRepo.CreatedAsync(commentModel);
+             return CreatedAtAction(nameof(GetById), new {id = commentModel.Id}, commentModel.ToCommentDto());
         }
-      
+      /// Update put metot 
+      [HttpPut]
+      [Route("{id}")]
+      public async Task<IActionResult> Update ([FromRoute] int id ,[FromBody] UpdateCommentReqDto updateDto){
+        var comment  = await _commentRepo.UpdateAsync(id,updateDto.ToCommentUpdate());
+        if(comment == null )
+        {
+            return NotFound("Comment not Found ");
+        }
+        return Ok(comment.ToCommentDto());
+      }
+
+      [HttpDelete]
+      [Route("{id}")]
+      public  async Task<IActionResult> Delete ([FromRoute]int id ){
+        var commentModel = await  _commentRepo.DeleteAsync(id);
+        if(commentModel == null )
+        {
+            return NotFound("Comment does not exist!!");
+        }
+        return Ok(commentModel);
     }
+ }
 }

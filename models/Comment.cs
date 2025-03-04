@@ -16,7 +16,6 @@ namespace api.models
 
         public DateTime CreateOn { get; set; } = DateTime.Now;
 
-
         public int? StockId { get; set; }
 
         public Stock? Stock { get; set; }

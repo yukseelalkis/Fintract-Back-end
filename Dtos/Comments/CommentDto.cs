@@ -15,7 +15,7 @@ namespace api.Dtos.Comments
 
         public DateTime CreateOn { get; set; } = DateTime.Now;
 
-
+        // FK OLDUGUNDAN DIKKAT ETMELIYIZ 
         public int? StockId { get; set; }
 
     }

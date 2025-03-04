@@ -3,6 +3,7 @@ using api.Data;
 using api.Interfaces;
 using api.Repository;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,13 @@ builder.Services.AddDbContext<ApplicationDBContex>(options => {
 //3️⃣ AddSingleton<> → Uygulama süresince tek bir nesne oluşturur.
 builder.Services.AddScoped<IStockRepository , StockRepository>();
 builder.Services.AddScoped<ICommentRepository , CommentRepository>();
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
+
 
 
 // Uygulama nesnesini oluşturur (Dependency Injection, Middleware'ler ve diğer yapılandırmaları hazır hale getirir).

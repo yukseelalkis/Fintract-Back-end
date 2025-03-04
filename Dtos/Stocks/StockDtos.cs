@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.Comments;
 
 namespace api.Dtos.Stocks
 {
@@ -20,5 +21,6 @@ namespace api.Dtos.Stocks
         public long  MarketCap { get; set; }
 
         // Normalde burada comments olurdu simdi olmicak 
+        public List<CommentDto> Comments  { get; set; }
     }
 }

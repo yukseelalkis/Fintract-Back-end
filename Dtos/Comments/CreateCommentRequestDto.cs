@@ -12,10 +12,6 @@ namespace api.Dtos.Comments
 
         public string  Content { get; set; } = string.Empty;
 
-        public DateTime CreateOn { get; set; } = DateTime.Now;
-
-
-        public int? StockId { get; set; }
 
     }
 }
