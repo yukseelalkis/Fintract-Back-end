@@ -29,7 +29,7 @@ namespace api.Controllers
             return Ok(commentDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id ){
             var comment = await _commentRepo.GetByIdAsync(id);
             if(comment == null){
@@ -38,7 +38,7 @@ namespace api.Controllers
             return Ok(comment.ToCommentDto());
         }
         /// CREATEED METOT
-        [HttpPost("{stockId}")]
+        [HttpPost("{stockId:int}")]
         public async  Task<IActionResult> Create ([FromRoute] int stockId,[FromBody] CreateCommentRequestDto createCommentReq)
         {
             // iste stock id Kontrol ediyoruz boyle bir stock var mi dye bakiyoruz yoksa hata veriyoruz
@@ -53,7 +53,7 @@ namespace api.Controllers
         }
       /// Update put metot 
       [HttpPut]
-      [Route("{id}")]
+      [Route("{id:int}")]
       public async Task<IActionResult> Update ([FromRoute] int id ,[FromBody] UpdateCommentReqDto updateDto){
         var comment  = await _commentRepo.UpdateAsync(id,updateDto.ToCommentUpdate());
         if(comment == null )
@@ -64,7 +64,7 @@ namespace api.Controllers
       }
 
       [HttpDelete]
-      [Route("{id}")]
+      [Route("{id:int}")]
       public  async Task<IActionResult> Delete ([FromRoute]int id ){
         var commentModel = await  _commentRepo.DeleteAsync(id);
         if(commentModel == null )
