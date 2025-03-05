@@ -13,6 +13,7 @@ namespace api.Controllers
     public class CommentController : ControllerBase
     {
         
+        /// degisikliler yuapiyoruzz zart zurt 
         private readonly ICommentRepository _commentRepo;
         // stock repo uretmemeizin sebebi stock reponun  stockidsine ulasmamiz lazim 
         private readonly IStockRepository _stockRepo;
