@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stocks;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -24,21 +25,30 @@ namespace api.Controllers
             _context = contex;
         }
 
+        // [HttpGet]
+        // public async Task<IActionResult> GetAll(){
+        //     // bu oncesi dtosuz neden diye gptye sorduk cevaplar 
+        //     //Bu değişikliğin sebebi, veritabanı modelini dış dünyaya (API tüketicisine) doğrudan açmamak ve daha güvenli, optimize bir veri yapısı sunmaktır.
+        //     //2️⃣ Verinin Optimize Edilmesi (Az Veri Göndermek)
+        //     //3️⃣ ORM (Entity Framework) Bağlılık Problemlerini Önlemek
+        //     //4️⃣ API’nın Dışarıya Olan Bağımlılığını Azaltmak    
+        //    // var stocks = await  _context.Stocks.ToListAsync();
+        //    // comment ile farki reposorty icinde gosteriyor o da incluede metodu
+        //       if (!ModelState.IsValid)
+        //         return BadRequest(ModelState);
+        //    var stocks = await  _stockRepository.GetAllAsync();
+        //     var stockDto = stocks.Select(s=> s.ToStockDto());
+        //     return Ok(stocks);
+        // }
         [HttpGet]
-        public async Task<IActionResult> GetAll(){
-            // bu oncesi dtosuz neden diye gptye sorduk cevaplar 
-            //Bu değişikliğin sebebi, veritabanı modelini dış dünyaya (API tüketicisine) doğrudan açmamak ve daha güvenli, optimize bir veri yapısı sunmaktır.
-            //2️⃣ Verinin Optimize Edilmesi (Az Veri Göndermek)
-            //3️⃣ ORM (Entity Framework) Bağlılık Problemlerini Önlemek
-            //4️⃣ API’nın Dışarıya Olan Bağımlılığını Azaltmak    
-           // var stocks = await  _context.Stocks.ToListAsync();
-           // comment ile farki reposorty icinde gosteriyor o da incluede metodu
-              if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-           var stocks = await  _stockRepository.GetAllAsync();
-            var stockDto = stocks.Select(s=> s.ToStockDto());
-            return Ok(stocks);
-        }
+         public async Task<IActionResult> GetAll([FromQuery] QueryObject query){
+            if (!ModelState.IsValid)
+                 return BadRequest(ModelState);
+            var stocks = await  _stockRepository.GetAllAsync(query);
+             var stockDto = stocks.Select(s=> s.ToStockDto());
+             return Ok(stocks);
+         }
+        
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id ){
             if (!ModelState.IsValid)

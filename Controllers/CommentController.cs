@@ -23,15 +23,26 @@ namespace api.Controllers
             _commentRepo=commentRepo;
             _stockRepo=stockRepo;
         }
+        // [HttpGet]
+        // public async Task<IActionResult> GetAll(){
+        //     //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
+        //     if (!ModelState.IsValid)
+        //         return BadRequest(ModelState);
+        //     var comments = await _commentRepo.GetAllAsync();
+        //     var commentDto = comments.Select(s => s.ToCommentDto());
+        //     return Ok(commentDto);
+        // }
+
         [HttpGet]
         public async Task<IActionResult> GetAll(){
-            //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var comments = await _commentRepo.GetAllAsync();
-            var commentDto = comments.Select(s => s.ToCommentDto());
-            return Ok(commentDto);
-        }
+             //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
+             if (!ModelState.IsValid)
+                 return BadRequest(ModelState);
+             var comments = await _commentRepo.GetAllAsync();
+             var commentDto = comments.Select(s => s.ToCommentDto());
+             return Ok(commentDto);
+         }
+
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id ){
