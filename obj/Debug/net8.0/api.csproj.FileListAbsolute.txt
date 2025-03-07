@@ -140,3 +140,7 @@ C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Microsoft.AspNetCore.J
 C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\api.staticwebassets.runtime.json
+C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\c# Api Ornekleri\Youtube Ders Api\api\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll

@@ -1,8 +1,12 @@
 // Web uygulaması için bir yapılandırıcı (builder) oluşturur
 using api.Data;
 using api.Interfaces;
+using api.models;
 using api.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +51,43 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     });
 
+builder.Services.AddIdentity<AppUsers, IdentityRole>(options =>{
+    //Şifrede en az bir rakam (0-9) bulunmalı.
+    options.Password.RequireDigit= true;
+    //Şifrede en az bir küçük harf (a-z) olmalı.
+    options.Password.RequireLowercase = true;
+    //Şifrede en az bir büyük harf (A-Z) olmalı.
+    options.Password.RequireUppercase= true;
+    //Şifrede en az bir özel karakter (!@#$% vs.) bulunmalı.
+    options.Password.RequireNonAlphanumeric= true;
+    //Şifre en az 12 karakter uzunluğunda olmalı.
+    options.Password.RequiredLength = 8;
 
+})
+.AddEntityFrameworkStores<ApplicationDBContex>();   
+
+//
+
+builder.Services.AddAuthentication(options =>{
+    options.DefaultAuthenticateScheme=
+    options.DefaultChallengeScheme=
+    options.DefaultForbidScheme=
+    options.DefaultScheme=
+    options.DefaultSignInScheme=
+    options.DefaultSignOutScheme=JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(
+    options=>{
+        options.TokenValidationParameters = new TokenValidationParameters{
+            ValidateIssuer= true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidateAudience= true,
+            ValidAudience=  builder.Configuration["JWT:Audience"],
+            ValidateIssuerSigningKey= true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+            ),
+        };
+    });
 
 // Uygulama nesnesini oluşturur (Dependency Injection, Middleware'ler ve diğer yapılandırmaları hazır hale getirir).
 var app = builder.Build();
@@ -62,7 +102,7 @@ if (app.Environment.IsDevelopment())
 {
     // Swagger API dokümantasyonunu etkinleştir.
     app.UseSwagger();
-
+ 
     // Swagger UI'yi etkinleştirerek geliştiricilerin API'yi test etmesine olanak tanır.
     app.UseSwaggerUI();
 
@@ -70,7 +110,9 @@ if (app.Environment.IsDevelopment())
 // HTTP'den HTTPS'e yönlendirme yaparak güvenliği artırır.
 app.UseHttpsRedirection();
 
-
+// aciklamalar
+app.UseAuthentication();
+app.UseAuthorization();
  // burasi degisti buranin aciklamasini eklemiz lazim 
 
 app.MapControllers();
