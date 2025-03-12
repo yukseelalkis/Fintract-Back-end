@@ -10,6 +10,6 @@ namespace api.models
 
     public class AppUsers : IdentityUser
     {
-        public int MyProperty { get; set; }
+        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
     }
 }
