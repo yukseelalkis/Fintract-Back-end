@@ -22,11 +22,11 @@ namespace api.Service
             _config=config;
             _key = new  SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
         }
-        public string CreateToken(AppUsers users)
+        public string CreateToken(AppUsers user)
         {
             var claims = new List<Claim>{
-                new Claim(JwtRegisteredClaimNames.Email , users.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName , users.UserName)
+                new Claim(JwtRegisteredClaimNames.Email , user.Email),
+                new Claim(JwtRegisteredClaimNames.GivenName , user.UserName)
             };
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
             var tokenDescriptor = new SecurityTokenDescriptor{

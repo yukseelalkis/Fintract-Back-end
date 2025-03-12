@@ -14,6 +14,10 @@ using Microsoft.Identity.Client;
 namespace api.Controllers
 {
     [Route("api/stock")]
+    [ApiController]
+
+
+
     public class StockControllers : ControllerBase
     {
         private readonly ApplicationDBContex _context;
@@ -66,7 +70,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);           
              var stockModel = stockDto.toStockFromCreateDto();
                 await _stockRepository.CreateAsync(stockModel);
-             return  CreatedAtAction(nameof(GetById), new {id = stockModel.ToStockDto()});
+             return  CreatedAtAction(nameof(GetById), new {id = stockModel.Id}, stockModel.ToStockDto());
         }
 
         [HttpPut]

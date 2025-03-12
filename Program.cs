@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,37 @@ builder.Services.AddEndpointsApiExplorer();
 
 // Swagger/OpenAPI desteği ekleniyor. Bu sayede API dokümantasyonu otomatik olarak oluşturulabilir.
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,  // Token'ın nereye ekleneceğini belirtiyor (Header içinde olacak)
+        Description = "Please enter a valid token",  // Swagger'da gözükecek açıklama
+        Name = "Authorization",  // Header'da kullanılacak isim (Genellikle "Authorization" olur)
+        Type = SecuritySchemeType.Http,  // Güvenlik türü HTTP olacak
+        BearerFormat = "JWT",  // Bearer token formatı JWT olacak
+        Scheme = "Bearer"  // Kullanılacak kimlik doğrulama şeması Bearer
+    });
+
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
 
 
 /// **Veritabanı Bağlantısı Ekleniyor**
@@ -46,6 +78,7 @@ builder.Services.AddDbContext<ApplicationDBContex>(options => {
 builder.Services.AddScoped<IStockRepository , StockRepository>();
 builder.Services.AddScoped<ICommentRepository , CommentRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPortfolioRepository , PortfolioRepository>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
