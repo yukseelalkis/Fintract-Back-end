@@ -50,10 +50,10 @@ namespace api.Controllers
 
         ///////////GPT//////
         ///
-    [HttpGet]
-    [Authorize]
-    public async Task<IActionResult> GetUserPortfolio()
-    {
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserPortfolio()
+        {
         
         var username = User.GetUserName();
          if (string.IsNullOrEmpty(username))
@@ -80,7 +80,34 @@ namespace api.Controllers
          }
 
             return Ok(userPortfolio);
-    }
+        }
+    
+    [HttpPost]
+    [Authorize]
+    public  async Task<IActionResult> AddPortfolio(string symbol){
+        var username = User.GetUserName();
+        var appUser = await _userManager.FindByNameAsync(username);
+        // amacimiz sadece stockun symbollerini alip kurdurmak istiyoruz
+        var stock = await _stockRepo.GetBySymbol(symbol);
+        if(stock == null ) return  BadRequest("Stock is not found!!!");
+        var userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
+        if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol)) return BadRequest("Cannot add same stock to portfolio");
+        
+        var portfolioModel = new Portfolio
+        {
+            StockId = stock.Id,
+            AppUsersId = appUser.Id
+        };
+        await _portfolioRepo.CreatedAsync(portfolioModel);   
 
+        if (portfolioModel == null )
+        {
+            return StatusCode(500, "Could not create");
+        }
+        else {
+            return Created();
+        }
+       
+    }
     }
 }

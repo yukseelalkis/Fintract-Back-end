@@ -16,21 +16,14 @@ namespace api.Repository
         {
             _contex= contex;
         }
-        // public async Task<List<Stock>> GetUserPortfolio(AppUsers user)
-        // {
-        //     return await _contex.Portfolios.Where(u => u.AppUsersId == user.Id)
-        //     .Select(stock => new Stock
-        //     {
-        //         Id = stock.StockId,
-        //         Symbol = stock.Stock.Symbol,
-        //         CompanyName =  stock.Stock.CompanyName,
-        //         Purchase =  stock.Stock.Purchase,
-        //         LastDiv =  stock.Stock.LastDiv,
-        //         Industry =  stock.Stock.Industry,
-        //         MarketCap = stock.Stock.MarketCap
 
-        //     }).ToListAsync();
-        // }
+        public async Task<Portfolio> CreatedAsync(Portfolio portfolio)
+        {
+            await _contex.Portfolios.AddAsync(portfolio);
+            await _contex.SaveChangesAsync();
+            return portfolio;
+        }
+
 
         //////////  GPT ////////// 
         public async Task<List<Stock>> GetUserPortfolio(AppUsers user)
