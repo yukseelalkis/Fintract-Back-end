@@ -15,7 +15,7 @@ namespace api.Dtos.Stocks
         public string  Symbol { get; set; } = string.Empty;
            //CompanyName
         [Required]
-        [MaxLength (10, ErrorMessage ="CompanyName cannot  ve over 10 characters")]         
+        [MaxLength (20, ErrorMessage ="CompanyName cannot  ve over 10 characters")]         
         public string  CompanyName { get; set; } = string.Empty;
          //Purchase
         [Required]

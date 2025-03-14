@@ -109,5 +109,27 @@ namespace api.Controllers
         }
        
     }
+    [HttpDelete]
+    [Authorize]
+    public async Task<IActionResult> DeletePortfolio (string symbol){
+        // user name lazim cunklu Authorize bu  user name lazim
+        // extenmsion uzerinden cekecegiz
+        var userName = User.GetUserName();
+        // burasi ekli olan paketten gelen bir durum 
+        var appUser  = await _userManager.FindByNameAsync(userName);
+
+        var userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
+
+        var filteredStock = userPortfolio.Where(S=> S.Symbol.ToLower() == symbol.ToLower()).ToList();
+
+        if(filteredStock.Count() == 1){
+            await _portfolioRepo.DeletePortfolio(appUser,symbol);
+        }
+        else{
+            return BadRequest("Stock not in your portfolio");
+        }
+        return Ok();
+
     }
+  }
 }

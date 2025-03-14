@@ -11,17 +11,32 @@ namespace api.Repository
 {
     public class PortfolioRepository : IPortfolioRepository
     {
-        private readonly ApplicationDBContex _contex;
+        private readonly ApplicationDBContex _context;
         public PortfolioRepository(ApplicationDBContex contex)
         {
-            _contex= contex;
+            _context= contex;
         }
 
         public async Task<Portfolio> CreatedAsync(Portfolio portfolio)
         {
-            await _contex.Portfolios.AddAsync(portfolio);
-            await _contex.SaveChangesAsync();
+            await _context.Portfolios.AddAsync(portfolio);
+            await _context.SaveChangesAsync();
             return portfolio;
+        }
+
+        public async Task<Portfolio> DeletePortfolio(AppUsers user, string symbol)
+        {
+            // ilk once arama yapacak 
+            var portfolioModel =  await _context.Portfolios.FirstOrDefaultAsync(x => x.AppUsersId == user.Id  && x.Stock.Symbol.ToLower() == symbol.ToLower());
+            // ARAMA SONUCUNU KONTROL
+            if(portfolioModel == null)
+            {
+                return null;
+            }
+            _context.Portfolios.Remove(portfolioModel);
+            await _context.SaveChangesAsync();
+            return portfolioModel;
+            
         }
 
 
@@ -33,12 +48,12 @@ namespace api.Repository
                     throw new ArgumentNullException(nameof(user), "User is null in GetUserPortfolio.");
                 }
 
-            if (_contex.Portfolios == null)
+            if (_context.Portfolios == null)
                 {
                     throw new InvalidOperationException("Database context is null.");
                 }
 
-                return await _contex.Portfolios
+                return await _context.Portfolios
                             .Where(u => u.AppUsersId == user.Id)
                             .Select(stock => new Stock
                             {
