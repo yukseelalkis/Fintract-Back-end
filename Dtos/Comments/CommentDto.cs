@@ -14,6 +14,9 @@ namespace api.Dtos.Comments
         public string  Content { get; set; } = string.Empty;
 
         public DateTime CreateOn { get; set; } = DateTime.Now;
+        // kim tarafindan yapidligii bakmak icin yaptik
+        // mapperdada dgisecek
+        public string  CreatedBy { get; set; } = string.Empty;
 
         // FK OLDUGUNDAN DIKKAT ETMELIYIZ 
         public int? StockId { get; set; }

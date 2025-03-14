@@ -40,11 +40,11 @@ namespace api.Repository
         ///////////////////////// GETLERIMIZ ////////////////////////////////
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await  _context.Comments.ToListAsync();
+            return await  _context.Comments.Include(a=>a.Appuser).ToListAsync();
         }
         public async Task<Comment?> GetByIdAsync(int id)
         {
-            return await _context.Comments.FindAsync(id);
+            return await _context.Comments.Include(a=>a.Appuser).FirstOrDefaultAsync(c=>c.Id == id);
         }
         ///////////////////// Update Metottt  ////////////////////////////////////////
         public async Task<Comment?> UpdateAsync(int id, Comment commentModel)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContex))]
-    partial class ApplicationDBContexModelSnapshot : ModelSnapshot
+    [Migration("20250314134503_AllowNullAppUserId")]
+    partial class AllowNullAppUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "00cc6fe4-9ff6-4fdc-b8f5-f5a7757fbf09",
+                            Id = "c6522bb8-b1bf-4b63-bc40-4e12b98c232a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4fc683e8-8019-4384-a757-206d2ec4a7ea",
+                            Id = "2736657d-1fa0-4be6-a58c-e96968ea6482",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -243,7 +246,6 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -373,9 +375,7 @@ namespace api.Migrations
                 {
                     b.HasOne("api.models.AppUsers", "Appuser")
                         .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("api.models.Stock", "Stock")
                         .WithMany("Comments")

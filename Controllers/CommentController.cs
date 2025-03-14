@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Comments;
+using api.Extensions;
 using api.Interfaces;
 using api.Mappers;
+using api.models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -19,10 +22,14 @@ namespace api.Controllers
         // stock repo uretmemeizin sebebi stock reponun  stockidsine ulasmamiz lazim 
         private readonly IStockRepository _stockRepo;
 
-        public CommentController( ICommentRepository commentRepo , IStockRepository  stockRepo)
+        private readonly UserManager<AppUsers> _userManager;
+
+        public CommentController( ICommentRepository commentRepo , IStockRepository  stockRepo,
+        UserManager<AppUsers> userManager)
         {
             _commentRepo=commentRepo;
             _stockRepo=stockRepo;
+            _userManager = userManager;
         }
         // [HttpGet]
         // public async Task<IActionResult> GetAll(){
@@ -67,9 +74,15 @@ namespace api.Controllers
             {
                 return BadRequest("Stock is not exist!!!");
             }
-             var commentModel = createCommentReq.ToCommentFromCreate(stockId);
-             await _commentRepo.CreatedAsync(commentModel);
-             return CreatedAtAction(nameof(GetById), new {id = commentModel.Id}, commentModel.ToCommentDto());
+            var userName = User.GetUserName();
+            var AppUser = await _userManager.FindByNameAsync(userName);
+
+            var commentModel = createCommentReq.ToCommentFromCreate(stockId);
+
+            commentModel.AppUserId =AppUser.Id;
+
+            await _commentRepo.CreatedAsync(commentModel);
+            return CreatedAtAction(nameof(GetById), new {id = commentModel.Id}, commentModel.ToCommentDto());
         }
       /// Update put metot 
       [HttpPut]
