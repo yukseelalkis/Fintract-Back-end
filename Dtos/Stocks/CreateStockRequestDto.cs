@@ -11,7 +11,7 @@ namespace api.Dtos.Stocks
         //Symbol
         [Required]
         [MaxLength (10, ErrorMessage ="Symbol cannot  ve over 10 characters")]   
-        [MinLength (2, ErrorMessage ="Symbol cannot  ve min 2 characters")]   
+        [MinLength (1, ErrorMessage ="Symbol cannot  ve min 2 characters")]   
         public string  Symbol { get; set; } = string.Empty;
         //CompanyName
         [Required]

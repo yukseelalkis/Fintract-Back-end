@@ -20,36 +20,26 @@ namespace api.Controllers
         private readonly IStockRepository _stockRepo;
         private readonly UserManager<AppUsers> _userManager;
         private readonly IPortfolioRepository _portfolioRepo;
+        private readonly IFMPService _fmpService;
         // portfolyo tamamen appuser altinda 
         // app user in icersiidne portfolye 
         //portfolyede ise stocklarla baglantisi var 
         // stockunda comment ile baglantisi var 
         // app useri cekerken protfolye cekiyoruz stock cekioruz ve comment cekiyoruz baglasntili olacak sekilde
 
-        public PortfolioController(UserManager<AppUsers> userManager , IStockRepository stockRepo, IPortfolioRepository portfolioRepo)
+        public PortfolioController(UserManager<AppUsers> userManager , IStockRepository stockRepo, IPortfolioRepository portfolioRepo,
+        IFMPService fMPService)
         {
             
             _userManager = userManager;
             _stockRepo=stockRepo;
             _portfolioRepo= portfolioRepo;
+            _fmpService=fMPService;
         }
 
-        // [HttpGet]
-        // [Authorize]
-        // public async  Task<IActionResult> GetUserPortfolio()
-        // {
-        //     //Bu satırda, JWT token veya kimlik doğrulama bilgileri içinden kullanıcının adını (username) almak için ClaimsPrincipal nesnesi kullanılıyor.
-        //     var username = User.GetUserName();
-        //     //Bu satırda, veritabanındaki kullanıcıyı (AppUser) getiriyoruz.
-        //     var appuser = await _userManager.FindByNameAsync(username);
-        //     var userPortfolio = await _portfolioRepo.GetUserPortfolio(appuser);
-        //     return Ok(userPortfolio);
-        // }
-        
 
 
         ///////////GPT//////
-        ///
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetUserPortfolio()
@@ -87,9 +77,19 @@ namespace api.Controllers
     public  async Task<IActionResult> AddPortfolio(string symbol){
         var username = User.GetUserName();
         var appUser = await _userManager.FindByNameAsync(username);
-        // amacimiz sadece stockun symbollerini alip kurdurmak istiyoruz
         var stock = await _stockRepo.GetBySymbol(symbol);
-        if(stock == null ) return  BadRequest("Stock is not found!!!");
+        if(stock == null ) 
+        {
+            stock = await _fmpService.FindStockBySymbolAsync(symbol);
+            if (stock == null)
+            {
+                return BadRequest("Stock does not exists");
+            }
+            else {
+                await _stockRepo.CreateAsync(stock);
+            }
+        }
+        
         var userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
         if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol)) return BadRequest("Cannot add same stock to portfolio");
         

@@ -23,24 +23,16 @@ namespace api.Controllers
         private readonly IStockRepository _stockRepo;
 
         private readonly UserManager<AppUsers> _userManager;
+        private readonly IFMPService _fmpService;
 
         public CommentController( ICommentRepository commentRepo , IStockRepository  stockRepo,
-        UserManager<AppUsers> userManager)
+        UserManager<AppUsers> userManager, IFMPService fMPService)
         {
             _commentRepo=commentRepo;
             _stockRepo=stockRepo;
             _userManager = userManager;
+            _fmpService=fMPService;
         }
-        // [HttpGet]
-        // public async Task<IActionResult> GetAll(){
-        //     //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
-        //     if (!ModelState.IsValid)
-        //         return BadRequest(ModelState);
-        //     var comments = await _commentRepo.GetAllAsync();
-        //     var commentDto = comments.Select(s => s.ToCommentDto());
-        //     return Ok(commentDto);
-        // }
-
         [HttpGet]
         public async Task<IActionResult> GetAll(){
              //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
@@ -64,20 +56,30 @@ namespace api.Controllers
             return Ok(comment.ToCommentDto());
         }
         /// CREATEED METOT
-        [HttpPost("{stockId:int}")]
-        public async  Task<IActionResult> Create ([FromRoute] int stockId,[FromBody] CreateCommentRequestDto createCommentReq)
+        [HttpPost]
+        [Route("{symbol:alpha}")]
+        public async  Task<IActionResult> Create ([FromRoute] string  symbol,[FromBody] CreateCommentRequestDto createCommentReq)
         {
             // iste stock id Kontrol ediyoruz boyle bir stock var mi dye bakiyoruz yoksa hata veriyoruz
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if (!await _stockRepo.StockExists(stockId))
-            {
-                return BadRequest("Stock is not exist!!!");
+           // symbol var mi kontrol saglamasi  async yazmamisiz ama cagirdigimiz fonksiyon bir asyncdir.  
+            var stock = await   _stockRepo.GetBySymbol(symbol);
+            // yoksa  ne dondurmesi gerekiyor onu yazacaz
+            if(stock == null){
+                stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                if (stock == null)
+                {
+                    return BadRequest("Stock is not exist");
+                }
+                else{
+                    await _stockRepo.CreateAsync(stock);
+                }
             }
             var userName = User.GetUserName();
             var AppUser = await _userManager.FindByNameAsync(userName);
 
-            var commentModel = createCommentReq.ToCommentFromCreate(stockId);
+            var commentModel = createCommentReq.ToCommentFromCreate(stock.Id);
 
             commentModel.AppUserId =AppUser.Id;
 
