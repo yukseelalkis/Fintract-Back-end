@@ -148,6 +148,14 @@ if (app.Environment.IsDevelopment())
 // HTTP'den HTTPS'e yönlendirme yaparak güvenliği artırır.
 app.UseHttpsRedirection();
 
+app.UseCors(x => x
+    .AllowAnyMethod()           // GET, POST, PUT, DELETE hepsine izin ver
+    .AllowAnyHeader()           // Header ne olursa olsun kabul et
+    .AllowCredentials()         // Cookies veya Authorization header gibi bilgiler gelsin
+    //.WithOrigins("https://localhost:44351") // Belirli origin'e izin ver (pasif)
+    .SetIsOriginAllowed(origin => true) // Tüm origin'lere izin ver
+);
+
 // aciklamalar
 app.UseAuthentication();
 app.UseAuthorization();

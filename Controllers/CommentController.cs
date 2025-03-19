@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Comments;
 using api.Extensions;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,11 +36,12 @@ namespace api.Controllers
             _fmpService=fMPService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll(){
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery]CommentQueryObject queryObject){
              //ModelState, gelen HTTP isteğindeki verilerin model kurallarına uyup uymadığını kontrol eden bir nesnedir.
              if (!ModelState.IsValid)
                  return BadRequest(ModelState);
-             var comments = await _commentRepo.GetAllAsync();
+             var comments = await _commentRepo.GetAllAsync(queryObject);
              var commentDto = comments.Select(s => s.ToCommentDto());
              return Ok(commentDto);
          }
