@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IUj/z3KtUVY+D0GJ9AZpnw8wEXqMuBYq4/yF+dgz3kJq8dlr0+urMarcWOvFm0HQE4kfTBqhJVRxLgNz0tt74g==",
+  "dgSpecHash": "Fj0AvqHIpqskuLnJIhbZKU6ha1BbJqvn/HfjVIy/zXG2q8WDs5erqNomauwGAPP/Ay2PTmC0Q/LFgxpnyszA3Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\YÜKSEL\\Projects\\Fintract-Back-end\\api.csproj",
+  "projectFilePath": "C:\\c# Api Ornekleri\\Youtube Ders Api\\api\\api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\YÜKSEL\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\YÜKSEL\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

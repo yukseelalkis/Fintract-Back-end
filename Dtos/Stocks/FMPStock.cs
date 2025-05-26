@@ -7,7 +7,7 @@ namespace api.Dtos.Stocks
 {
     public class FMPStock
     {
-        public string symbol { get; set; }
+         public string symbol { get; set; }
         public double price { get; set; }
         public long marketCap { get; set; }
         public double beta { get; set; }

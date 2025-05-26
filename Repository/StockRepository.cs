@@ -61,16 +61,10 @@ namespace api.Repository
          
         }
 
-        public async Task<List<Stock>> GetPopularStocksAsync(int count = 5)
-        {
-            return await _context.Stocks
-                .OrderByDescending(s => s.Comments.Count) // En çok yorum alanlar popüler sayılır
-                .Take(count) // Belirtilen sayıda getir
-                .ToListAsync();
-        }
-
-
-    
+        // public  async Task<List<Stock>> GetAllAsync()
+        // {
+        //    return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+        // }
 
 
         public async Task<Stock?> GetByIdAsync(int id)
@@ -106,9 +100,7 @@ namespace api.Repository
             
             return exitingStock;
         }
-
-     
+        
+        
     }
 }
-
-
