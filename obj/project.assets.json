@@ -4850,11 +4850,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\c# Api Ornekleri\\Youtube Ders Api\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\YÜKSEL\\Projects\\Fintract-Back-end\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\c# Api Ornekleri\\Youtube Ders Api\\api\\api.csproj",
+      "projectPath": "C:\\Users\\YÜKSEL\\Projects\\Fintract-Back-end\\api.csproj",
       "packagesPath": "C:\\Users\\YÜKSEL\\.nuget\\packages\\",
-      "outputPath": "C:\\c# Api Ornekleri\\Youtube Ders Api\\api\\obj\\",
+      "outputPath": "C:\\Users\\YÜKSEL\\Projects\\Fintract-Back-end\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\YÜKSEL\\AppData\\Roaming\\NuGet\\NuGet.Config",
