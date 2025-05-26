@@ -1,0 +1,10 @@
+## Mimari ve Klasör Yapısı
+
+Bu proje, **katmanlı mimari** prensiplerine uygun olarak yapılandırılmıştır. Aşağıda ana katmanlar ve klasörler açıklanmaktadır:
+
+- **Controllers:** API uç noktalarını yöneten denetleyici sınıflar. HTTP isteklerini alır, ilgili iş mantığı servislerine yönlendirir ve sonuçları döndürür.
+- **Services (Business Logic):** Uygulamanın iş kurallarını ve veri işleme mantığını barındıran servis sınıfları. Controller’lardan gelen çağrıları işler, gerekirse veri katmanına erişir.
+- **DataAccess (Repository):** Veritabanı işlemlerini gerçekleştiren katman. Repository sınıfları veya Entity Framework context’i içerir; veri okuma/yazma logiğini kapsar.
+- **Models/Entities:** Veritabanı varlıklarını veya uygulama içi temel nesneleri temsil eden sınıflar.
+- **DTOs (Data Transfer Objects):** Dış dünyaya açılan veri transfer nesneleri. API istek/cevap modelleri olarak kullanılır.
+- **Utilities/Helpers:** Yardımcı fonksiyonlar veya sınıflar (örn. JWT oluşturucu, şifreleme yardımcıları, vs.) bulunuyorsa, tekrar kullanılan ortak işlemleri içerir.
